@@ -95,7 +95,7 @@ Transactions that span these systems are coordinated by Kubling’s soft transac
 ### Run all tests
 
 ```bash
-./mvnw clean test
+./mvnw clean test -f camunda-embedded-test/
 ```
 
 This will:
