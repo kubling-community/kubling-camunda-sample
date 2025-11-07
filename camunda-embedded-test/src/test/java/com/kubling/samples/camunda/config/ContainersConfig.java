@@ -48,7 +48,7 @@ public final class ContainersConfig {
             .waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofMinutes(2)));
 
     public static final KublingContainer<?> kubling =
-            new KublingContainer<>(DockerImageName.parse("europe-southwest1-docker.pkg.dev/bluelone-repos/kubling-public/kubling-dbvirt-service:25.6"))
+            new KublingContainer<>()
                     .withNetwork(network)
                     .dependsOn(mysql, postgres)
                     .withEnv(Map.of(
