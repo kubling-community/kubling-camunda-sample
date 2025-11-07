@@ -2,6 +2,7 @@ package com.kubling.samples.camunda.support;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
@@ -11,6 +12,7 @@ import org.testcontainers.containers.output.FrameConsumerResultCallback;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class KublingBundleBuilder {
@@ -30,6 +32,15 @@ public class KublingBundleBuilder {
         log.info("Generating Kubling bundle using Docker low-level API...");
 
         DockerClient dockerClient = DockerClientFactory.instance().client();
+
+        try {
+            dockerClient.pullImageCmd("kubling/kubling-cli:latest")
+                    .exec(new PullImageResultCallback())
+                    .awaitCompletion(5, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
 
         Volume volume = new Volume("/base");
         HostConfig hostConfig = HostConfig.newHostConfig()
